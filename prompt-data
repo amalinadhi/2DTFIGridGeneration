@@ -1,0 +1,15 @@
+# --------------------------------------- #
+             SMOOTHING RESULTS
+# --------------------------------------- #
+number of iteration    = 11
+Root mean square error = 9.98%
+
+
+# --------------------------------------- #
+             MESH QUALITY CHECK
+# --------------------------------------- #
+minimum mesh area = 3.48e-05
+maximum mesh area = 0.0561
+ortoghonality scale. 0 = Orthogonal
+minimum value = 1.38e-03
+maximum value = 2.1616
