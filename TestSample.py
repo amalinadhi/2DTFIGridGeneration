@@ -1,5 +1,7 @@
-import CoreMethod
-import PlotMethod
+import os
+
+import core.CoreMethod as CoreMethod
+import core.PlotMethod as PlotMethod
 
 
 # ---------------------------------------------------------------------------- #
@@ -13,12 +15,28 @@ wakeChord = 0.2*chord
 thickness = 0.12
 
 # Nodal configurations
-nAirfoil = 31
+jMax = 31
+nAirfoil = 21
 nAirfoilWake = 7
 nOutflow = 51
+#jMax = 101
+#nAirfoil = 21
+#nAirfoilWake = 7
+#nOutflow = 51
+
+# Configuration
+# discretization
 nWake = nAirfoilWake + nOutflow - 1
 iMax = 2*nAirfoil + 2*nWake - 2
-jMax = 51
+
+# Directory
+# Create directory
+dirName = "results"
+
+if not os.path.exists(dirName):
+    os.mkdir(dirName)
+else:
+    pass
 
 # ---------------------------------------------------------------------------- #
 # 2. INITIALIZATION OF X AND Y
@@ -44,10 +62,11 @@ xi, eta = CoreMethod.BoundaryBlendedControlFunction(u, v, iMax, jMax)
 X, Y = CoreMethod.TFI(X, Y, xi, eta, iMax, jMax)
 
 # Mesh Quality Check
-CoreMethod.MeshQuality(X, Y, iMax, jMax)
+skewnessBefore = CoreMethod.MeshQuality(X, Y, iMax, jMax, 
+                                        "Mesh Quality - Before Smoothing")
 
 # Plot
-PlotMethod.plotGrid(X, Y)
+PlotMethod.plotGrid(X, Y, "Transfinite Interpolation - Before Smoothing")
 
 # ---------------------------------------------------------------------------- #
 # 4. PERFORM SMOOTHING WITH LAPLACE
@@ -60,10 +79,11 @@ X, Y, residual = CoreMethod.LaplaceSmoothing(X, Y, iMax, jMax, omega, targetErro
 PlotMethod.plotResidual(residual)
 
 # Mesh Quality Check
-CoreMethod.MeshQuality(X, Y, iMax, jMax)
+skewnessAfter = CoreMethod.MeshQuality(X, Y, iMax, jMax, 
+                                        "Mesh Quality - After Smoothing")
 
 # Plot Grid and Residual
-PlotMethod.plotGrid(X, Y)
+PlotMethod.plotGrid(X, Y, "Transfinite Interpolation - After Smoothing")
 
 # ---------------------------------------------------------------------------- #
 # 5. CREATE DATA STRUCTURES
@@ -90,5 +110,8 @@ boundaryFlags = CoreMethod.BoundaryFlags(nOutflow, iMax, jMax)
 # write data structures
 CoreMethod.WriteDataStructures(nodes, cellNeighbor, cellNodalNumber, cellType,
                                 boundaryFlags, iMax, jMax)
+
+# compare mesh quality datas
+PlotMethod.plotQualityComparison(skewnessBefore, skewnessAfter)
 
 # ---------------------------------------------------------------------------- #
