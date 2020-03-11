@@ -2,6 +2,7 @@ import math
 import numpy as np
 
 from AirfoilEquation import NACA0012
+import PlotMethod
 
 
 # --------------------------------------------------------------------------------- #
@@ -389,7 +390,7 @@ def Initialization(chord, rOutflow, rFarfield, wakeChord, thickness,
         m = rFarfield
 
         # Distribution
-        A = 2   # exponential
+        A = 1.2   # exponential
 
         # Left
         X[0,j] = rOutflow
@@ -561,6 +562,31 @@ def MeshQuality(X, Y, iMax, jMax):
             skewness = max(np.array([tetaMaxOnMesh, tetaMinOnMesh]))
             meshSkewness[i,j] = skewness
     
+
+    # Create bar chart of skewness
+    data1 = []      # storing cell skewness < 0.2
+    data2 = []      # storing cell skewness < 0.4
+    data3 = []      # storing cell skewness < 0.6
+    data4 = []      # storing cell skewness < 0.8
+    data5 = []      # storing cell skewness > 0.8
+
+    for i in range(iMax-1):
+        for j in range(jMax-1):
+            if (meshSkewness[i,j] < 0.2):
+                data1.append(meshSkewness[i,j])
+            elif (meshSkewness[i,j] < 0.4):
+                data2.append(meshSkewness[i,j])
+            elif (meshSkewness[i,j] < 0.6):
+                data3.append(meshSkewness[i,j])
+            elif (meshSkewness[i,j] < 0.8):
+                data4.append(meshSkewness[i,j])
+            else:
+                data5.append(meshSkewness[i,j])
+    
+    skewnessData = [len(data1), len(data2), len(data3), 
+                    len(data4), len(data5)]
+    PlotMethod.plotBarQuality(skewnessData)
+
     print("")
     print("# --------------------------------------- #")
     print("             MESH QUALITY CHECK")
