@@ -1,7 +1,22 @@
+import numpy as np
 import matplotlib.pyplot as plt
 
 
 # ---------------------------------------------------------------------------- #
+
+def plotBarQuality(skewnessData):
+    label = ["< 0.2", "< 0.4", "< 0.6", "< 0.8", "> 0.8"]
+    index = np.arange(len(label))
+
+    plt.bar(index, skewnessData)
+    plt.xlabel("Skewness Index")
+    plt.ylabel("Number of cells")
+    plt.minorticks_on()
+    plt.grid(b=True, which='major', color='0.65', linestyle='-')
+    plt.grid(b=True, which='minor', color='0.65', linestyle='--')
+    plt.xticks(index, label)
+    plt.title("Cells Skewness Index")
+    plt.show()
 
 def plotGrid(X, Y, lineColor='b', lineWidth=1, 
             activatePoint=True, pointColor='r', pointSize=10):
@@ -41,7 +56,7 @@ def plotGrid(X, Y, lineColor='b', lineWidth=1,
     plt.minorticks_on()
     plt.grid(b=True, which='major', color='0.65', linestyle='-')
     plt.grid(b=True, which='minor', color='0.65', linestyle='--')
-    
+    plt.title("2D Structured Grid Generation")
     plt.show()
 
 def plotResidual(Residual):
@@ -61,6 +76,7 @@ def plotResidual(Residual):
     plt.grid(b=True, which='minor', color='0.65', linestyle='--')
     plt.xlabel("Iteration - ")
     plt.ylabel("RMSE [%]")
+    plt.title("Smoothing Residual")
     plt.show()
 
 # ---------------------------------------------------------------------------- #
