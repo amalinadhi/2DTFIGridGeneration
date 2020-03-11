@@ -1,0 +1,26 @@
+AFTER TFI
+# --------------------------------------- #
+             MESH QUALITY CHECK
+# --------------------------------------- #
+minimum mesh area = 2.37e-04
+maximum mesh area = 0.1048
+ortoghonality scale. 0 = Orthogonal
+minimum value = 1.95e-03
+maximum value = 2.0305
+
+SMOOTHING PROCESS
+# --------------------------------------- #
+             SMOOTHING RESULTS
+# --------------------------------------- #
+number of iteration    = 14
+Root mean square error = 7.43%
+
+AFTER TFI
+# --------------------------------------- #
+             MESH QUALITY CHECK
+# --------------------------------------- #
+minimum mesh area = 1.47e-04
+maximum mesh area = 0.1079
+ortoghonality scale. 0 = Orthogonal
+minimum value = 1.58e-03
+maximum value = 2.1765
