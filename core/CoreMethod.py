@@ -29,7 +29,23 @@ def BoundaryFlags(nOutflow, iMax, jMax):
     dataSymmetric = []
     dataPeriodic = []
 
-    # for top | the whole top is farfield
+    # for top | the tops are farfield and inlet
+    # farfield: bottom
+    for i in range(nOutflow):
+        index = iMax*(jMax-1) + 1 + i
+        dataFarfield.append(index)
+
+    # inlet: c-shaped
+    for i in range(nOutflow-1, iMax-(nOutflow-1)):
+        index = iMax*(jMax-1) + 1 + i
+        dataInlet.append(index)
+
+    # farfield: top
+    for i in range(iMax-(nOutflow-1)-1, iMax):
+        index = iMax*(jMax-1) + 1 + i
+        dataFarfield.append(index)
+            
+    """
     for i in range(iMax-1):
         index = (iMax-1)*(jMax-1) - (iMax-1) + i + 1
         if (i<nOutflow):
@@ -38,8 +54,20 @@ def BoundaryFlags(nOutflow, iMax, jMax):
             dataInlet.append(index)
         else:
             dataFarfield.append(index)
+    """
 
     # for left and right | the whole left and right is outflow
+    # Left
+    for j in range(jMax):
+        index = 1 + (j)*(iMax)
+        dataOutlet.append(index)
+
+    # Right
+    for j in range(jMax):
+        index = (j+1)*(iMax)
+        dataOutlet.append(index)
+    
+    """
     for j in range(jMax-1):
         # Left
         index = 1 + (j)*(iMax-1)
@@ -48,8 +76,14 @@ def BoundaryFlags(nOutflow, iMax, jMax):
         # Right
         index = (j+1)*(iMax-1)
         dataOutlet.append(index)
+    """
 
     # for bottom
+    for i in range(nOutflow-1, iMax-(nOutflow-1)):
+        index = i+1
+        dataSolid.append(index)
+
+    """
     for i in range(iMax-1):
         # bottom outflow
         if (i<nOutflow):
@@ -59,6 +93,7 @@ def BoundaryFlags(nOutflow, iMax, jMax):
         else:
             index = i+1
             dataSolid.append(index)
+    """
 
     dataFlags = [dataSolid, dataInlet, dataOutlet,
                     dataFarfield, dataSymmetric, dataPeriodic]
@@ -628,25 +663,25 @@ def NodesCoordinates(X, Y, iMax, jMax):
         index = i+iMax*jMax
         basicCoor[0, index] = index + 1
         basicCoor[1, index] = X[i,0]
-        basicCoor[2, index] = 2*Y[i,0] - Y[i,1]
+        basicCoor[2, index] = Y[i,0] - abs(Y[i,0] - Y[i,1])
 
         # Top
         index = i + (iMax+1)*(jMax+1)-1
         basicCoor[0, index] = index + 1
         basicCoor[1, index] = X[iMax-1-i,jMax-1]
-        basicCoor[2, index] = 2*Y[iMax-1-i,jMax-1] - Y[iMax-1-i,jMax-2]
+        basicCoor[2, index] = Y[iMax-1-i,jMax-1] + abs(Y[iMax-1-i,jMax-1] - Y[iMax-1-i,jMax-2])
 
     for j in range(jMax):
         # Right
         index = j + iMax*(jMax+1)
         basicCoor[0, index] = index + 1
-        basicCoor[1, index] = 2*X[iMax-1, j] - X[iMax-2, j]
+        basicCoor[1, index] = X[iMax-1, j] + abs(X[iMax-1, j] - X[iMax-2, j])
         basicCoor[2, index] = Y[iMax-1, j]
 
         # Left
         index = (nTotalPoints-1) - j
         basicCoor[0, index] = index + 1
-        basicCoor[1, index] = 2*X[0, j] - X[1, j]
+        basicCoor[1, index] = X[0, j] - abs(X[0, j] - X[1, j])
         basicCoor[2, index] = Y[0, j]
     
     return (basicCoor)
